@@ -1,11 +1,18 @@
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import CampDates from '../components/CampDates';
 import FAQ from '../components/FAQ';
 import Footer from '../components/Footer';
-import LandingPageVideo from '../components/LandingPageVideo';
 import Navigation from '../components/Navigation';
 import Page from '../components/Page';
 import WaveDivider from '../components/WaveDivider';
+
+const LandingPageVideo = dynamic(
+  () => import('../components/LandingPageVideo'),
+  {
+    ssr: false,
+  },
+);
 
 function HomePage() {
   return (

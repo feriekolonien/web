@@ -46,6 +46,10 @@ class MyDocument extends Document {
             rel="stylesheet"
             href="https://unpkg.com/tachyons/css/tachyons.min.css"
           />
+          <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@vime/core@^5/themes/default.css"
+          />
           <script async data-api="/_hive" src="/bee.js" />
         </Head>
         <body>
