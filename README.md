@@ -1,8 +1,7 @@
-![Feriekolonien logo](/public/logo.png)
+# ⚠️ This repo is archived. See new repo at https://github.com/feriekolonien/site
 
-# Feriekolonien Web &middot; [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/feriekolonien/web/blob/master/LICENSE)
 
-> Repository for Feriekoloniens frontend (powered by [NextJS](https://nextjs.org/))
+> (old) Repository for Feriekoloniens frontend (powered by [NextJS](https://nextjs.org/))
 
 This project organizes the pages and styles available on [feriekolonien.no](http://feriekolonien.no/)
 
