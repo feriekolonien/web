@@ -1,0 +1,120 @@
+---
+layout: base.vto
+---
+
+<section class="px-4 pt-4 pb-10 sm:px-6 sm:pt-20 md:px-8">
+    <div class="mb-6 grid grid-cols-3 items-center sm:mb-12">
+        <div>
+            <a href="/bilder/" class="inline-flex items-center hover:text-slate-500 transition-colors">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Tilbake til oversikt
+            </a>
+        </div>
+        <h1 class="text-center text-4xl font-extrabold sm:text-5xl lg:text-6xl">
+            {{ albumTitle }}
+        </h1>
+        <div></div>
+    </div>
+
+    {{ if album.images && album.images.length }}
+    <div class="pswp-gallery grid-gallery" id="my-gallery">
+        {{ for index, image of album.images }}
+            {{set origWidth = image.asset.metadata?.dimensions?.width || 1200 }}
+            {{set origHeight = image.asset.metadata?.dimensions?.height || 800 }}
+            {{set aspectRatio = origWidth / origHeight }}
+
+            <a href="{{ image.asset.url }}?w=1600&auto=format"
+               data-pswp-width="{{ origWidth }}"
+               data-pswp-height="{{ origHeight }}"
+               class="gallery-item group cursor-pointer relative overflow-hidden rounded-lg bg-gray-100"
+               style="aspect-ratio: {{ aspectRatio }};">
+
+                {{ comp.image({
+                    width: origWidth,
+                    height: origHeight,
+                    fillContainer: true,
+                    src: image.asset.url + "?w=600&auto=format",
+                    srcset: image.asset.url + "?w=300&auto=format 300w, " + image.asset.url + "?w=600&auto=format 600w, " + image.asset.url + "?w=900&auto=format 900w",
+                    sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
+                    altText: image.alt || `Bilde ${index + 1} fra ${albumTitle}`,
+                    loading: "lazy",
+                    objectFit: "cover",
+                    className: 'rounded'
+                }) }}
+            </a>
+        {{ /for }}
+    </div>
+    {{ /if }}
+
+    <!-- Back button -->
+    <div class="text-center mt-8">
+        <a href="/bilder/" class="inline-flex items-center hover:text-slate-500 transition-colors">
+            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Tilbake til oversikt
+        </a>
+    </div>
+</section>
+
+<!-- PhotoSwipe CSS -->
+<link href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.min.css" rel="stylesheet">
+
+<style>
+.grid-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  grid-auto-rows: minmax(200px, auto);
+}
+
+@media (min-width: 640px) {
+  .grid-gallery {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-gallery {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+.gallery-item {
+  transition: transform 0.2s ease-in-out;
+}
+
+.gallery-item:hover {
+  transform: translateY(-2px);
+}
+</style>
+
+<!-- PhotoSwipe JavaScript -->
+<script type="module">
+import PhotoSwipeLightbox from 'https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js';
+import PhotoSwipe from 'https://cdn.jsdelivr.net/npm/photoswipe@5.4.4/dist/photoswipe.esm.min.js';
+
+const lightbox = new PhotoSwipeLightbox({
+  gallery: '#my-gallery',
+  children: 'a',
+  pswpModule: PhotoSwipe,
+
+  // Options
+  bgOpacity: 0.9,
+  showHideAnimationType: 'zoom',
+  initialZoomLevel: 'fit',
+  secondaryZoomLevel: 1.5,
+  maxZoomLevel: 2,
+
+  // UI
+  closeTitle: 'Lukk',
+  zoomTitle: 'Zoom',
+  arrowPrevTitle: 'Forrige',
+  arrowNextTitle: 'Neste',
+});
+
+lightbox.init();
+</script>

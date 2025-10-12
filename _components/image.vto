@@ -1,0 +1,39 @@
+{{set isFixedSize = width && height && !fillContainer}}
+
+{{if isFixedSize}}
+  <div
+    class="image-wrapper"
+    style="width: {{width}}px; height: {{height}}px; display: inline-block;"
+  >
+    <img
+      alt="{{altText}}"
+      src="{{src}}"
+      {{if srcset}}srcset="{{srcset}}"{{/if}}
+      {{if sizes}}sizes="{{sizes}}"{{/if}}
+      loading="{{loading || 'lazy'}}"
+      fetchpriority="{{fetchpriority || 'auto'}}"
+      decoding="async"
+      width="{{width}}"
+      height="{{height}}"
+      style="width: 100%; height: 100%; object-fit: {{objectFit || 'contain'}};"
+      class="{{className || ''}}"
+    />
+  </div>
+{{else}}
+  <div
+    class="image-wrapper"
+    style="aspect-ratio: {{width}}/{{height}}; max-width: 100%;"
+  >
+    <img
+      alt="{{altText}}"
+      src="{{src}}"
+      {{if srcset}}srcset="{{srcset}}"{{/if}}
+      {{if sizes}}sizes="{{sizes}}"{{/if}}
+      loading="{{loading || 'lazy'}}"
+      fetchpriority="{{fetchpriority || 'auto'}}"
+      decoding="async"
+      style="width: 100%; height: 100%; object-fit: {{objectFit || 'cover'}};"
+      class="{{className || ''}}"
+    />
+  </div>
+{{/if}}

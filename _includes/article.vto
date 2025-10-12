@@ -1,0 +1,22 @@
+---
+layout: base.vto
+---
+
+<article class="max-w-8xl prose mx-auto mb-12 p-4 sm:px-6 md:prose-lg md:px-8 lg:prose-lg">
+    <div class="mb-8">
+        {{ comp.image({
+            width: 730,
+            height: 487,
+            fillContainer: true,
+            src: image.src,
+            srcset: `${image.src}?w=400 400w, ${image.src}?w=730 730w, ${image.src}?w=1460 1460w`,
+            sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 730px",
+            altText: image.alt,
+            objectFit: "cover",
+            fetchpriority: "high",
+            loading: "eager",
+            className: "rounded-xl"
+        }) }}
+    </div>
+{{ content }}
+</article>

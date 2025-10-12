@@ -39,7 +39,9 @@ yarn-error.log*
 #Build generated
 dist/
 build/
+_site
 
+./_site/
 
 # debug
 npm-debug.log*
@@ -56,4 +58,4 @@ yarn-error.log*
 .vercel
 
 # typescript
-*.tsbuildinfo
+i*.tsbuildinfo
