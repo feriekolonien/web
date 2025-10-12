@@ -1,10 +1,8 @@
+![Feriekolonien logo](/apps/web/public/logo.png)
+
 # Feriekolonien Website
 
 > Modern, fast website for Feriekolonien powered by [Lume](https://lume.land/) (Deno)
-
-<p align="center">
-  <img src="assets/logo.png" alt="Feriekolonien Logo" width="200" />
-</p>
 
 This project organizes the pages and content for [new.feriekolonien.no](https://new.feriekolonien.no/)
 
