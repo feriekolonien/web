@@ -1,63 +1,142 @@
-# ⚠️ This repo is archived. See new repo at https://github.com/feriekolonien/site
+# Feriekolonien Website
 
+> Modern, fast website for Feriekolonien powered by [Lume](https://lume.land/) (Deno)
 
-> (old) Repository for Feriekoloniens frontend (powered by [NextJS](https://nextjs.org/))
+<p align="center">
+  <img src="assets/logo.png" alt="Feriekolonien Logo" width="200" />
+</p>
 
-This project organizes the pages and styles available on [feriekolonien.no](http://feriekolonien.no/)
+This project organizes the pages and content for [new.feriekolonien.no](https://new.feriekolonien.no/)
 
-### Getting started
+## ✨ Features
 
-```sh
-git clone git@github.com:feriekolonien/web.git
-cd web && yarn install
-```
+- ⚡ **Fast & Modern** - Static site generation with Lume
+- 📱 **Responsive** - Works perfectly on all devices
+- 🖼️ **Photo Galleries** - Beautiful image galleries with PhotoSwipe lightbox
+- 🎨 **Modern CSS** - Styled with TailwindCSS
+- 📊 **CMS Integration** - Content managed through Sanity CMS
+- 🚀 **Zero JavaScript** - Works without JavaScript (progressive enhancement)
+- 🔍 **SEO Optimized** - Server-side rendered with proper meta tags
 
-This will clone the repo and install dependencies.
+## 🚀 Getting Started
 
-Next, configure environment variables:
+### Prerequisites
+- [Deno](https://deno.land/) 2.x or later
 
-```sh
-cp dev-template.env .env
-```
-
-This copies the template variables (Sanity configuration) to a new file called `.env`.
-
-After this, you should be able to start the local development server:
-
-```sh
-yarn dev
-```
-
-This starts the NextJS with hot module reloading (HMR)
-
-### Built With
-
-- **Next.js with Typescript**, check out their [docs for more info](https://nextjs.org/docs/getting-started).
-
-- Styling is done with [TailwindCSS](https://tailwindcss.com/).
-- Style guide and linting: ESLint and Prettier. It's recommended that you set up
-  your editor with and ESLint and Prettier extension. This will automatically highlight issues and automatically format your code. Even Tailwind classnames will be sorted as we're using the `prettier-plugin-tailwindcss` package.
-
-To run the TypeScript compiler, run ESlint and check formatting, run:
+### Installation
 
 ```sh
-yarn test # this will run "yarn prettier && yarn eslint && yarn ts"
+git clone https://github.com/feriekolonien/site.git
+cd site
 ```
 
-We should probably set this up with a pre-push hook, but that's TODO.
+### Development
 
-### Building and deploying
+```sh
+# Start development server with hot reload
+deno task dev
 
-This site is built and hosted on Vercel. We use their Github integration to automatically build and deploy on every commit. Just push a branch and Vercel will give comment a preview URL on your Github PR where you can see your changes.
+# Build for production
+deno task build
 
-When pushing to master changes are automatically deployed to production.
+# Serve built site locally
+deno task serve
+```
 
-To get access to the Vercel account, ask [@rix1](https://github.com/rix1).
+The site will be available at `http://localhost:3000`
 
-### CI/CD
+## 🏗️ Built With
 
-We havent set this up yet.
+- **[Lume](https://lume.land/)** - Static site generator for Deno
+- **[Deno](https://deno.land/)** - Modern JavaScript/TypeScript runtime
+- **[TailwindCSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[PhotoSwipe](https://photoswipe.com/)** - JavaScript image gallery and lightbox
+- **[Sanity](https://www.sanity.io/)** - Headless CMS for content management
 
-### Licensing
+## 📁 Project Structure
 
-[MIT Licence](https://github.com/feriekolonien/cms/blob/master/LICENSE)
+```
+├── _components/          # Reusable UI components
+│   ├── image.vto        # Modern image component
+│   └── navbar.vto       # Navigation component
+├── _includes/           # Page layouts and templates
+│   ├── base.vto        # Base HTML layout
+│   └── album.vto       # Photo album layout
+├── _data/              # Data files and API fetchers
+├── bilder/             # Photo gallery pages
+├── assets/             # Static assets (images, fonts, etc.)
+├── _config.ts          # Lume configuration
+└── deno.json          # Deno project configuration
+```
+
+## 🖼️ Image Handling
+
+The site features a modern image component with:
+- **Responsive images** - Automatic `srcset` generation
+- **Lazy loading** - Images load as needed
+- **Modern formats** - WebP/AVIF support through Sanity
+- **Layout shift prevention** - CSS `aspect-ratio` for stable layouts
+- **Performance optimized** - Proper `fetchpriority` and `loading` attributes
+
+## 📱 Photo Galleries
+
+Photo galleries use a justified rows layout algorithm with PhotoSwipe lightbox:
+- **Server-side layout calculation** - No layout shift
+- **Touch/swipe support** - Perfect for mobile
+- **Keyboard navigation** - Arrow keys, ESC to close
+- **Zoom functionality** - Pinch to zoom, mouse wheel
+- **Responsive design** - Works on all screen sizes
+
+## 🚀 Deployment
+
+The site is automatically deployed to GitHub Pages via GitHub Actions:
+
+1. **Push to `main`** triggers automatic deployment
+2. **GitHub Actions** builds the site with Lume
+3. **GitHub Pages** serves the static files
+4. **Custom domain** available at `new.feriekolonien.no`
+
+### Manual Deployment
+
+```sh
+# Build and deploy
+deno task build
+# Files are generated in _site/ directory
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+- `SANITY_PROJECT_ID` - Sanity project ID
+- `SANITY_DATASET` - Sanity dataset (usually "production")
+
+### Sanity CMS
+Content is managed through Sanity CMS. The site fetches:
+- Photo albums and images
+- Page content and metadata
+- Site configuration
+
+## 📝 Content Management
+
+1. **Albums** - Photo galleries organized by year
+2. **Images** - High-resolution photos with metadata
+3. **Pages** - Static content pages
+4. **Site settings** - Global configuration
+
+## 🔍 SEO & Performance
+
+- **Server-side rendering** - All content pre-rendered
+- **Semantic HTML** - Proper heading structure and landmarks
+- **Meta tags** - Open Graph and Twitter Card support
+- **Sitemap** - Automatically generated
+- **Fast loading** - Optimized images and minimal JavaScript
+
+## 📄 License
+
+[MIT License](LICENSE)
+
+---
+
+<p align="center">
+  Made with ❤️ for Feriekolonien
+</p>
