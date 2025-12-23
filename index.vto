@@ -110,19 +110,25 @@ dates:
 
                 <script>
                     (function() {
-                        // Target date: December 24, 2025 at 12:00 PM Norwegian time
-                        const targetDate = new Date('2025-12-24T12:00:00+01:00');
+                        // Target date from global configuration
+                        const targetDate = new Date('{{ openForRegistrationAt }}');
                         let lastSeconds = -1;
 
                         function updateCountdown() {
                             const now = new Date();
                             const timeDifference = targetDate - now;
 
-                            // If the target time has passed, show the dates with celebration
+                            // If the target time has passed, show the dates and reveal navbar link
                             if (timeDifference <= 0) {
                                 document.getElementById('countdown-container').style.display = 'none';
                                 const datesContainer = document.getElementById('dates-container');
                                 datesContainer.classList.remove('hidden');
+
+                                // Show registration link in navbar
+                                const registrationLink = document.getElementById('registration-nav-link');
+                                if (registrationLink) {
+                                    registrationLink.classList.remove('hidden');
+                                }
 
                                 // Add some confetti effect by temporarily adding classes
                                 setTimeout(() => {

@@ -10,6 +10,9 @@ const site = lume({
   location: new URL('https://github.com/feriekolonien/web'),
 });
 
+// Global variable for registration opening time
+site.data('openForRegistrationAt', '2025-12-24T00:00:00+01:00');
+
 site.add('/assets');
 site.add('./favicon.ico');
 
