@@ -10,6 +10,9 @@ links:
       url: /kontakt/
     - text: Støtte
       url: /grasrot/
+    - text: Påmelding
+      url: /register/
+      cta: true
 ---
 
 <nav class="mx-center mx-auto flex max-w-6xl flex-col py-5 sm:flex-row md:items-center">
@@ -23,36 +26,51 @@ links:
             }) }}
         </a>
     </div>
-    <ul class="mx-3 mt-4 space-x-6 text-slate-900 sm:mt-0 flex">
+    <ul class="mx-3 mt-4 text-slate-900 sm:mt-0 grid grid-cols-3 gap-3 sm:flex sm:space-x-6 items-baseline">
         {{ for link of links }}
             {{set isActive = url && url.startsWith(link.url) }}
-            <li>
+            <li class="flex justify-center sm:justify-start {{ if link.cta }}col-span-3 mt-2 sm:col-span-1 sm:mt-0{{ /if }}">
                 <a
-                    class="
-                        font-bold
-                        relative
-                        pb-1
-                        transition-colors
-                        duration-200
-                        ease-in-out
-                        hover:text-slate-600
-                        {{ if isActive }}
-                            text-primary-2
-                            after:w-full
-                        {{ else }}
-                            text-slate-900
-                            hover:after:w-full
-                        {{ /if }}
-                        after:content-['']
-                        after:absolute
-                        after:bottom-0
-                        after:left-0
-                        after:h-0.5
-                        {{ if isActive }}after:w-full after:bg-slate-900{{ else }}after:bg-slate-600 after:w-0{{ /if }}
-                        after:transition-all
-                        after:duration-300
-                        after:ease-out
-                    "
+                    {{ if link.cta }}
+                        class="
+                            bg-gradient-to-r from-[#2C72AC] to-[#46B3D9]
+                            text-white
+                            px-6 py-3 rounded-lg
+                            font-bold
+                            transition-all duration-200
+                            hover:shadow-lg hover:scale-105
+                            text-center sm:text-left
+                            w-full sm:w-auto
+                        "
+                    {{ else }}
+                        class="
+                            font-bold
+                            relative
+                            pb-1
+                            transition-colors
+                            duration-200
+                            ease-in-out
+                            hover:text-slate-600
+                            text-center sm:text-left
+                            text-sm sm:text-base
+                            {{ if isActive }}
+                                text-primary-2
+                                after:w-full
+                            {{ else }}
+                                text-slate-900
+                                hover:after:w-full
+                            {{ /if }}
+                            after:content-['']
+                            after:absolute
+                            after:bottom-0
+                            after:left-0
+                            after:h-0.5
+                            {{ if isActive }}after:w-full after:bg-slate-900{{ else }}after:bg-slate-600 after:w-0{{ /if }}
+                            after:transition-all
+                            after:duration-300
+                            after:ease-out
+                        "
+                    {{ /if }}
                     href="{{ link.url }}"
                     {{ if isActive }}aria-current="page"{{ /if }}
                 >

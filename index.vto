@@ -3,13 +3,13 @@ layout: base.vto
 dates:
     - title: 1. parti
       icon: 🦀
-      date: 24. juni - 4. juli
+      date: 23. juni - 3. juli
     - title: 2. parti
       icon: ☀️
-      date: 11. juli - 21. juli
+      date: 10. juli - 20. juli
     - title: 3. parti
       icon: 🐚
-      date: 28. juli - 7. august
+      date: 27. juli - 6. august
 ---
 
 <div class="mx-auto mb-14 grid max-w-6xl grid-cols-1 gap-4 pt-8 md:grid-cols-2">
@@ -53,17 +53,117 @@ dates:
             <div class="rounded-xl bg-gradient-to-tr from-[#2C72AC] to-[#46B3D9] py-7 px-6 absolute inset-0 mx-auto rotate-[-8deg] opacity-70 transition-all duration-300 ease-in-out group-hover:-rotate-3 md:ml-0"></div>
             <div class="rounded-xl bg-gradient-to-tr from-[#2C72AC] to-[#46B3D9] py-7 px-6 relative mx-auto shadow-xl md:ml-0 text-center">
                 <h2 class="mb-4 text-3xl font-bold">Datoer for 2026</h2>
-                <p class="italic mb-4 text-lg">Kommer 24 desember 🎅</p>
-                <!--<ul class="text-base md:text-xl">
-                    {{ for date of dates }}
-                        <li>
-                            <p class="flex">
-                                <span class="mr-4 text-3xl">{{date.icon}}</span><span class="font-semibold tracking-tight">{{date.title}}</span>:
-                                {{date.date}}
-                            </p>
-                        </li>
-                    {{ /for }}
-                </ul>-->
+
+                <!-- Countdown Timer Container -->
+                <div id="countdown-container" class="mb-4">
+                    <p class="italic mb-4 text-lg">Kommer om:</p>
+                    <div id="countdown-timer" class="text-2xl font-bold mb-4 flex flex-wrap justify-center gap-4">
+                        <div class="text-center bg-white/20 rounded-lg p-2 min-w-[60px]">
+                            <div id="days" class="text-3xl font-extrabold">0</div>
+                            <div class="text-xs uppercase">dager</div>
+                        </div>
+                        <div class="text-center bg-white/20 rounded-lg p-2 min-w-[60px]">
+                            <div id="hours" class="text-3xl font-extrabold">0</div>
+                            <div class="text-xs uppercase">timer</div>
+                        </div>
+                        <div class="text-center bg-white/20 rounded-lg p-2 min-w-[60px]">
+                            <div id="minutes" class="text-3xl font-extrabold">0</div>
+                            <div class="text-xs uppercase">min</div>
+                        </div>
+                        <div id="seconds-container" class="text-center bg-white/30 rounded-lg p-2 min-w-[60px] transition-all duration-200">
+                            <div id="seconds" class="text-3xl font-extrabold">0</div>
+                            <div class="text-xs uppercase">sek</div>
+                        </div>
+                    </div>
+                    <p class="text-sm opacity-90 flex items-center justify-center gap-2">
+                        Sjekk igjen kl. 12:00 på julaften!
+                        <span>🎄</span>
+                    </p>
+                </div>
+
+                <!-- Dates Container (hidden initially) -->
+                <div id="dates-container" class="hidden">
+                    <div class="mb-6">
+                        <p class="text-sm opacity-90 text-balance">God jul og velkommen til påmelding! 🎄</p>
+                    </div>
+                    <ul class="text-base md:text-lg space-y-3 text-left">
+                        {{ for date of dates }}
+                            <li>
+                                <div class="bg-white/20 rounded-lg p-3 flex items-center">
+                                    <span class="mr-4 text-3xl">{{date.icon}}</span>
+                                    <div>
+                                        <span class="font-bold tracking-tight block">{{date.title}}</span>
+                                        <span class="text-sm opacity-90">{{date.date}}</span>
+                                    </div>
+                                </div>
+                            </li>
+                        {{ /for }}
+                    </ul>
+                    <div class="mt-6">
+                        <a href="/register" class="inline-flex items-center gap-2 bg-white/30 hover:bg-white/40 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+                            Påmelding er åpen! <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                              <path fill-rule="evenodd" d="M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <script>
+                    (function() {
+                        // Target date: December 24, 2025 at 12:00 PM Norwegian time
+                        const targetDate = new Date('2025-12-24T12:00:00+01:00');
+                        let lastSeconds = -1;
+
+                        function updateCountdown() {
+                            const now = new Date();
+                            const timeDifference = targetDate - now;
+
+                            // If the target time has passed, show the dates with celebration
+                            if (timeDifference <= 0) {
+                                document.getElementById('countdown-container').style.display = 'none';
+                                const datesContainer = document.getElementById('dates-container');
+                                datesContainer.classList.remove('hidden');
+
+                                // Add some confetti effect by temporarily adding classes
+                                setTimeout(() => {
+                                    datesContainer.classList.remove('animate-pulse');
+                                }, 3000);
+                                return;
+                            }
+
+                            // Calculate time components
+                            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                            // Add scale animation to seconds container when it changes
+                            if (seconds !== lastSeconds && lastSeconds !== -1) {
+                                const secondsContainer = document.getElementById('seconds-container');
+                                secondsContainer.classList.add('scale-110');
+                                setTimeout(() => {
+                                    secondsContainer.classList.remove('scale-110');
+                                }, 200);
+                            }
+                            lastSeconds = seconds;
+
+                            // Update the display with zero-padding for single digits
+                            document.getElementById('days').textContent = days;
+                            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+                            // Special effects when we're getting close
+                            if (days === 0 && hours === 0 && minutes < 5) {
+                                document.getElementById('countdown-timer').classList.add('animate-pulse');
+                            }
+                        }
+
+                        // Update immediately and then every second
+                        updateCountdown();
+                        setInterval(updateCountdown, 1000);
+                    })();
+                </script>
             </div>
         </div>
         <!--<div class="max-w-sm text-center md:text-right">
