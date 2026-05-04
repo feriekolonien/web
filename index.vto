@@ -100,7 +100,7 @@ dates:
                         {{ /for }}
                     </ul>
                     <div class="mt-6">
-                        <a href="/register" class="inline-flex items-center gap-2 bg-white/30 hover:bg-white/40 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+                        <a id="registration-open-cta" href="/register/" class="inline-flex items-center gap-2 bg-white/30 hover:bg-white/40 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
                             Påmelding er åpen! <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
                               <path fill-rule="evenodd" d="M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z" clip-rule="evenodd" />
                             </svg>
@@ -177,6 +177,50 @@ dates:
         </div>-->
     </div>
 </div>
+<div
+    id="registration-sticky-banner"
+    class="fixed inset-x-0 bottom-0 z-50 translate-y-full border-t border-white/20 bg-[#0E2E58] px-4 py-3 text-white shadow-2xl transition-transform duration-300 ease-out md:py-4"
+    aria-hidden="true"
+>
+    <div class="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <p class="text-sm font-semibold uppercase tracking-wide text-[#46B3D9]">Påmelding 2026</p>
+            <p class="text-base font-bold md:text-lg">Påmeldingen er åpen. Sikre plass på Filtvet Feriekoloni.</p>
+        </div>
+        <a href="/register/" class="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 font-bold text-[#0E2E58] transition-colors duration-200 hover:bg-slate-100">
+            Meld på nå
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                <path fill-rule="evenodd" d="M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z" clip-rule="evenodd" />
+            </svg>
+        </a>
+    </div>
+</div>
+<script>
+    (function() {
+        const targetDate = new Date('{{ openForRegistrationAt }}');
+        const sourceCta = document.getElementById('registration-open-cta');
+        const stickyBanner = document.getElementById('registration-sticky-banner');
+
+        if (!sourceCta || !stickyBanner) {
+            return;
+        }
+
+        function setStickyBannerVisibility() {
+            const registrationIsOpen = new Date() >= targetDate;
+            const sourceCtaHasPassed = sourceCta.getBoundingClientRect().bottom < 0;
+            const shouldShow = registrationIsOpen && sourceCtaHasPassed;
+
+            stickyBanner.classList.toggle('translate-y-full', !shouldShow);
+            stickyBanner.classList.toggle('translate-y-0', shouldShow);
+            stickyBanner.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
+        }
+
+        setStickyBannerVisibility();
+        window.addEventListener('scroll', setStickyBannerVisibility, { passive: true });
+        window.addEventListener('resize', setStickyBannerVisibility);
+        setInterval(setStickyBannerVisibility, 60000);
+    })();
+</script>
 <div class="py-24 sm:py-32">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="grid grid-cols-1 items-center gap-x-8 gap-y-16 lg:grid-cols-2">
