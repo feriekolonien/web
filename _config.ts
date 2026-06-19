@@ -12,6 +12,7 @@ const site = lume({
 
 // Global variable for registration opening time
 site.data('openForRegistrationAt', '2025-12-24T12:00:00+01:00');
+site.data('registrationDeadlineAt', '2026-06-01T23:59:59+02:00');
 
 site.add('/assets');
 site.add('./favicon.ico');

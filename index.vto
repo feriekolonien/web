@@ -83,7 +83,7 @@ dates:
 
                 <!-- Dates Container (hidden initially) -->
                 <div id="dates-container" class="hidden">
-                    <div class="mb-5 rounded-lg bg-[#FDE68A] p-3 text-sm text-[#0E2E58]">
+                    <div id="registration-deadline-note" class="mb-5 hidden rounded-lg bg-[#FDE68A] p-3 text-sm text-[#0E2E58]">
                         <p>Fristen for sommeren 2026 er passert. Søknader vurderes ved ledige plasser.</p>
                     </div>
                     <ul class="text-base md:text-lg space-y-3 text-left">
@@ -101,7 +101,7 @@ dates:
                     </ul>
                     <div class="mt-6">
                         <a id="registration-open-cta" href="/register/" class="inline-flex items-center gap-2 bg-white/30 hover:bg-white/40 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
-                            Påmelding er åpen! <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                            <span id="registration-open-cta-label">Påmelding er åpen!</span> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
                               <path fill-rule="evenodd" d="M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z" clip-rule="evenodd" />
                             </svg>
                         </a>
@@ -112,17 +112,28 @@ dates:
                     (function() {
                         // Target date from global configuration
                         const targetDate = new Date('{{ openForRegistrationAt }}');
+                        const deadlineDate = new Date('{{ registrationDeadlineAt }}');
                         let lastSeconds = -1;
 
                         function updateCountdown() {
                             const now = new Date();
                             const timeDifference = targetDate - now;
+                            const deadlineHasPassed = now > deadlineDate;
 
                             // If the target time has passed, show the dates and reveal navbar link
                             if (timeDifference <= 0) {
                                 document.getElementById('countdown-container').style.display = 'none';
                                 const datesContainer = document.getElementById('dates-container');
                                 datesContainer.classList.remove('hidden');
+
+                                const deadlineNote = document.getElementById('registration-deadline-note');
+                                const openCtaLabel = document.getElementById('registration-open-cta-label');
+                                if (deadlineNote) {
+                                    deadlineNote.classList.toggle('hidden', !deadlineHasPassed);
+                                }
+                                if (openCtaLabel) {
+                                    openCtaLabel.textContent = deadlineHasPassed ? 'Meld deg på venteliste' : 'Påmelding er åpen!';
+                                }
 
                                 // Show registration link in navbar
                                 const registrationLink = document.getElementById('registration-nav-link');
@@ -184,11 +195,11 @@ dates:
 >
     <div class="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <p class="text-sm font-semibold uppercase tracking-wide text-[#46B3D9]">Påmelding 2026</p>
-            <p class="text-base font-bold md:text-lg">Fristen er passert. Søknader vurderes ved ledige plasser.</p>
+            <p id="registration-sticky-kicker" class="text-sm font-semibold uppercase tracking-wide text-[#46B3D9]">Påmelding 2026</p>
+            <p id="registration-sticky-copy" class="text-base font-bold md:text-lg">Påmeldingen er åpen for sommeren 2026.</p>
         </div>
         <a href="/register/" class="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 font-bold text-[#0E2E58] transition-colors duration-200 hover:bg-slate-100">
-            Meld på nå
+            <span id="registration-sticky-cta-label">Meld på nå</span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
                 <path fill-rule="evenodd" d="M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z" clip-rule="evenodd" />
             </svg>
@@ -198,11 +209,30 @@ dates:
 <script>
     (function() {
         const targetDate = new Date('{{ openForRegistrationAt }}');
+        const deadlineDate = new Date('{{ registrationDeadlineAt }}');
         const sourceCta = document.getElementById('registration-open-cta');
         const stickyBanner = document.getElementById('registration-sticky-banner');
+        const stickyKicker = document.getElementById('registration-sticky-kicker');
+        const stickyCopy = document.getElementById('registration-sticky-copy');
+        const stickyCtaLabel = document.getElementById('registration-sticky-cta-label');
 
         if (!sourceCta || !stickyBanner) {
             return;
+        }
+
+        function updateStickyBannerCopy() {
+            const deadlineHasPassed = new Date() > deadlineDate;
+            if (stickyKicker) {
+                stickyKicker.textContent = deadlineHasPassed ? 'Venteliste 2026' : 'Påmelding 2026';
+            }
+            if (stickyCopy) {
+                stickyCopy.textContent = deadlineHasPassed
+                    ? 'Fristen er passert. Søknader vurderes ved ledige plasser.'
+                    : 'Påmeldingen er åpen for sommeren 2026.';
+            }
+            if (stickyCtaLabel) {
+                stickyCtaLabel.textContent = deadlineHasPassed ? 'Meld deg på venteliste' : 'Meld på nå';
+            }
         }
 
         function setStickyBannerVisibility() {
@@ -210,6 +240,7 @@ dates:
             const sourceCtaHasPassed = sourceCta.getBoundingClientRect().bottom < 0;
             const shouldShow = registrationIsOpen && sourceCtaHasPassed;
 
+            updateStickyBannerCopy();
             stickyBanner.classList.toggle('translate-y-full', !shouldShow);
             stickyBanner.classList.toggle('translate-y-0', shouldShow);
             stickyBanner.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');

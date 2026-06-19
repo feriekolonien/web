@@ -6,10 +6,14 @@ title: Påmelding - Trefoldighet Feriekoloni
 <div class="bg-primary-3">
     <div class="mx-auto max-w-6xl px-3 pt-8">
         <div class="mb-8 text-center">
-            <h1 class="text-4xl font-bold text-slate-900 mb-4">Påmelding til Feriekolonien</h1>
-            <p class="text-lg text-slate-700 max-w-2xl mx-auto mb-4">
+            <h1 id="registration-page-title" class="text-4xl font-bold text-slate-900 mb-4">Påmelding til Feriekolonien</h1>
+            <p id="registration-page-lead" class="text-lg text-slate-700 max-w-2xl mx-auto mb-4">
                 Velkommen til påmelding for sommeren 2026! Fyll ut skjemaet nedenfor for å melde deg på en av våre fantastiske ferieperioder.
             </p>
+            <div id="registration-page-deadline-note" class="mx-auto mb-4 hidden max-w-2xl rounded-lg bg-[#FDE68A] p-4 text-left text-sm text-[#0E2E58]">
+                <p class="font-semibold">Fristen for sommeren 2026 er passert.</p>
+                <p class="mt-1">Du kan fortsatt fylle ut skjemaet for venteliste. Vi tar kontakt hvis det blir ledig plass.</p>
+            </div>
             <p class="text-sm text-slate-600">
                 Har du spørsmål? <a href="/kontakt" class="text-blue-600 hover:text-blue-800 font-medium">Kontakt oss gjerne!</a>
             </p>
@@ -28,3 +32,26 @@ title: Påmelding - Trefoldighet Feriekoloni
         Laster inn…
     </iframe>
 </div>
+
+<script>
+    (function() {
+        const deadlineDate = new Date('{{ registrationDeadlineAt }}');
+        if (new Date() <= deadlineDate) {
+            return;
+        }
+
+        const title = document.getElementById('registration-page-title');
+        const lead = document.getElementById('registration-page-lead');
+        const deadlineNote = document.getElementById('registration-page-deadline-note');
+
+        if (title) {
+            title.textContent = 'Venteliste til Feriekolonien';
+        }
+        if (lead) {
+            lead.textContent = 'Fristen for sommeren 2026 er passert, men du kan fortsatt fylle ut skjemaet for venteliste.';
+        }
+        if (deadlineNote) {
+            deadlineNote.classList.remove('hidden');
+        }
+    })();
+</script>
