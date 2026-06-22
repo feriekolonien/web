@@ -835,6 +835,39 @@ summary::-webkit-details-marker {
   text-align: left;
 }
 
+.heat-winner-select {
+  min-width: 10rem;
+  border: 1px dashed rgba(255, 255, 255, 0.75);
+  border-radius: 6px;
+  padding: 0.45rem 2rem 0.45rem 0.6rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-family: "Montserrat", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.heat-winner-select:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 2px;
+}
+
+.heat-winner-select:disabled {
+  cursor: not-allowed;
+  color: rgba(255, 255, 255, 0.65);
+  opacity: 0.75;
+}
+
+.heat-winner-select option {
+  background: #fff;
+  color: var(--tournament-strong);
+}
+
+.heat-winner-value {
+  border-style: solid;
+  color: #fff;
+}
+
 .visual-bracket {
   display: grid;
   grid-auto-flow: column;
@@ -914,6 +947,36 @@ summary::-webkit-details-marker {
 
 .visual-team-box {
   margin-left: 0.75rem;
+}
+
+.visual-winner-select {
+  min-height: 2.35rem;
+  margin-left: 0.75rem;
+  border: 1px dashed #9fb1c8;
+  border-radius: 8px;
+  padding: 0.55rem 2rem 0.55rem 0.7rem;
+  background: var(--tournament-soft);
+  color: var(--tournament-strong);
+  font-family: "Montserrat", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.visual-winner-select:focus {
+  border-color: var(--tournament-accent);
+  outline: 0;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(44, 114, 172, 0.14);
+}
+
+.visual-winner-select:disabled {
+  cursor: not-allowed;
+  color: var(--tournament-muted);
+  opacity: 0.65;
+}
+
+.print-only {
+  display: none;
 }
 
 .visual-team-box {
@@ -1294,13 +1357,18 @@ summary::-webkit-details-marker {
   }
 
   .visual-team-box,
-  .visual-vs {
+  .visual-vs,
+  .visual-winner-select {
     margin-left: 0.55rem;
   }
 
   .visual-team-box {
     min-height: 1.8rem;
     padding: 0.35rem 0.45rem;
+  }
+
+  .print-only {
+    display: block;
   }
 
   .team-table th,

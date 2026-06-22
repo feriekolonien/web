@@ -39,9 +39,19 @@ export function createTournament({
     }
   }
 
+  const heats = buildHeats(teams, teamsPerHeat);
+  const missingHeatTeams = countMissingHeatTeams(heats);
+  if (missingHeatTeams > 0) {
+    warnings.push(
+      `Antall lag går ikke opp i kampoppsettet, og ${missingHeatTeams} ${
+        missingHeatTeams === 1 ? "kamp mangler" : "kamper mangler"
+      } lag.`,
+    );
+  }
+
   return {
     teams,
-    heats: buildHeats(teams, teamsPerHeat),
+    heats,
     unused,
     warnings,
   };
@@ -158,6 +168,19 @@ function buildHeats(teams, teamsPerHeat) {
     heats[index % heatCount].teams.push(team);
   });
   return heats;
+}
+
+function countMissingHeatTeams(heats) {
+  return heats.reduce((sum, heat) => {
+    const bracketSlots = nextPowerOfTwo(Math.max(2, heat.teams.length));
+    return sum + bracketSlots - heat.teams.length;
+  }, 0);
+}
+
+function nextPowerOfTwo(number) {
+  let power = 1;
+  while (power < number) power *= 2;
+  return power;
 }
 
 function getTeamName(index, style) {
