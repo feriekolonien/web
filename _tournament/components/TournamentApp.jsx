@@ -99,7 +99,7 @@ export default function TournamentApp() {
         </div>
         <div class="tournament-header-actions print-hidden">
           <button
-            class="tournament-button tournament-button-secondary tournament-button-small"
+            class="tournament-button tournament-button-quiet tournament-button-small"
             type="button"
             onClick={() => useDemoData(true)}
           >

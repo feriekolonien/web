@@ -20,11 +20,20 @@ export default function PeopleInput({
 
   return (
     <section class="tournament-panel">
-      <h2>1. Deltakere</h2>
+      <div class="tournament-panel-heading">
+        <span class="tournament-step">1</span>
+        <div>
+          <h2>Deltakere</h2>
+          <p>CSV med navn og alder. Alt blir behandlet lokalt i nettleseren.</p>
+        </div>
+      </div>
       <label class="upload-box" for="csv-file">
-        <span class="upload-title">Velg CSV-fil</span>
-        <span class="upload-help">
-          Kolonner: fornavn og alder. Overskrift er valgfritt.
+        <span class="upload-badge">CSV</span>
+        <span class="upload-copy">
+          <span class="upload-title">Velg CSV-fil</span>
+          <span class="upload-help">
+            Kolonner: fornavn og alder. Overskrift er valgfritt.
+          </span>
         </span>
         <input
           id="csv-file"
@@ -53,9 +62,18 @@ export default function PeopleInput({
         </div>
       </div>
       <div class="summary-row">
-        <span>{summary.children} barn</span>
-        <span>{summary.adults} voksne</span>
-        <span>{summary.total} totalt</span>
+        <span>
+          <strong>{summary.children}</strong>
+          <small>Barn</small>
+        </span>
+        <span>
+          <strong>{summary.adults}</strong>
+          <small>Voksne</small>
+        </span>
+        <span>
+          <strong>{summary.total}</strong>
+          <small>Totalt</small>
+        </span>
       </div>
     </section>
   );

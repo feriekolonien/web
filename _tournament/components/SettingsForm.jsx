@@ -7,7 +7,16 @@ export default function SettingsForm({
 }) {
   return (
     <section class="tournament-panel">
-      <h2>2. Oppsett</h2>
+      <div class="tournament-panel-heading">
+        <span class="tournament-step">2</span>
+        <div>
+          <h2>Oppsett</h2>
+          <p>
+            Velg hvem som spiller, hvordan lagene fordeles, og hvor store
+            heatene skal være.
+          </p>
+        </div>
+      </div>
       <div class="control-stack">
         <fieldset>
           <legend>Turneringstype</legend>

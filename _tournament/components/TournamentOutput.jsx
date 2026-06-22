@@ -50,6 +50,7 @@ export default function TournamentOutput({
       </div>
       <div class="output-toolbar print-hidden">
         <div>
+          <span class="output-kicker">Utskriftsklart oppsett</span>
           <h2>{title}</h2>
           <p>
             {teamCount} lag, {peopleInTeams} spillere i lag,{" "}
