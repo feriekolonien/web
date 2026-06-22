@@ -110,8 +110,7 @@ function assignPlayersToTeams(players, teams, distributionMode) {
     });
     sortedPlayers.forEach((player) => {
       const bestTeam = [...teams].sort((left, right) => {
-        const sameAgeDifference =
-          countPlayersWithAge(left, player.age) -
+        const sameAgeDifference = countPlayersWithAge(left, player.age) -
           countPlayersWithAge(right, player.age);
         if (sameAgeDifference !== 0) return sameAgeDifference;
 

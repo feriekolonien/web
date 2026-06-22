@@ -1,0 +1,23 @@
+export const sampleCsv = `Navn,Alder
+Anna,9
+Emil,10
+Sofia,11
+Jonas,12
+Maja,10
+Oliver,9
+Nora,13
+Lucas,11
+Thea,8
+William,12
+Leah,10
+Henrik,13
+Oda,9
+Isak,11
+Ingrid,12
+Mathias,10
+Kari,34
+Thomas,41
+Mina,27
+Eirik,22
+Lars,48
+Silje,31`;

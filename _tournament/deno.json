@@ -1,0 +1,11 @@
+{
+  "imports": {
+    "preact": "npm:preact@10.27.2",
+    "preact/hooks": "npm:preact@10.27.2/hooks",
+    "preact/jsx-runtime": "npm:preact@10.27.2/jsx-runtime"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
+  }
+}
