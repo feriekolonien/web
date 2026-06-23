@@ -166,6 +166,7 @@ function padBracketSlots(slots) {
 function buildBracketRounds(initialSlots, winners, heatName) {
   const rounds = [];
   let current = initialSlots;
+  let matchNumber = 1;
 
   while (current.length >= 2) {
     const roundIndex = rounds.length;
@@ -174,9 +175,10 @@ function buildBracketRounds(initialSlots, winners, heatName) {
       const matchIndex = index / 2;
       matches.push({
         key: `${heatName}-${roundIndex}-${matchIndex}`,
-        label: `Kamp ${matchIndex + 1}`,
+        label: `Kamp ${matchNumber}`,
         slots: [current[index], current[index + 1]],
       });
+      matchNumber += 1;
     }
     rounds.push(matches);
     if (matches.length === 1) break;

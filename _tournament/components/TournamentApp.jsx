@@ -1,30 +1,30 @@
-import { useMemo, useState } from "preact/hooks";
-import { sampleCsv } from "../data/sampleCsv.js";
-import { parseCsv } from "../lib/csv.js";
-import { createTournament } from "../lib/teams.js";
-import PeopleInput from "./PeopleInput.jsx";
-import SettingsForm from "./SettingsForm.jsx";
-import TournamentOutput from "./TournamentOutput.jsx";
+import { useMemo, useState } from 'preact/hooks';
+import { sampleCsv } from '../data/sampleCsv.js';
+import { parseCsv } from '../lib/csv.js';
+import { createTournament } from '../lib/teams.js';
+import PeopleInput from './PeopleInput.jsx';
+import SettingsForm from './SettingsForm.jsx';
+import TournamentOutput from './TournamentOutput.jsx';
 
 const defaultSettings = {
-  type: "kids",
+  type: 'kids',
   playersPerTeam: 5,
   adultAge: 18,
-  teamNameStyle: "letters",
-  distributionMode: "random",
+  teamNameStyle: 'letters',
+  distributionMode: 'random',
   teamsPerHeat: 4,
 };
 
 export default function TournamentApp() {
-  const [manualCsv, setManualCsv] = useState("");
+  const [manualCsv, setManualCsv] = useState('');
   const [people, setPeople] = useState([]);
   const [settings, setSettings] = useState(defaultSettings);
   const [tournament, setTournament] = useState(null);
-  const [activeView, setActiveView] = useState("teams");
+  const [activeView, setActiveView] = useState('teams');
 
   const summary = useMemo(() => {
-    const children = people.filter((person) => person.type === "child").length;
-    const adults = people.filter((person) => person.type === "adult").length;
+    const children = people.filter((person) => person.type === 'child').length;
+    const adults = people.filter((person) => person.type === 'adult').length;
     return { children, adults, total: people.length };
   }, [people]);
 
@@ -38,13 +38,13 @@ export default function TournamentApp() {
     const nextSettings = { ...settings, ...patch };
     setSettings(nextSettings);
 
-    if (Object.hasOwn(patch, "adultAge") && manualCsv.trim()) {
+    if (Object.hasOwn(patch, 'adultAge') && manualCsv.trim()) {
       loadPeople(manualCsv, nextSettings.adultAge);
     }
   }
 
   function useDemoData(shouldGenerate) {
-    const nextSettings = { ...settings, type: "mixed" };
+    const nextSettings = { ...settings, type: 'mixed' };
     const nextPeople = normalizePeople(
       parseCsv(sampleCsv),
       nextSettings.adultAge,
@@ -56,7 +56,7 @@ export default function TournamentApp() {
 
     if (shouldGenerate) {
       setTournament(buildTournament(nextPeople, nextSettings));
-      setActiveView("teams");
+      setActiveView('teams');
     }
   }
 
@@ -76,14 +76,14 @@ export default function TournamentApp() {
         teams: [],
         heats: [],
         unused: [],
-        warnings: ["Last opp eller lim inn en CSV med navn og alder først."],
-        emptyTitle: "Ingen deltakere",
+        warnings: ['Last opp eller lim inn en CSV med navn og alder først.'],
+        emptyTitle: 'Ingen deltakere',
       });
       return;
     }
 
     setTournament(buildTournament(people, settings));
-    setActiveView("teams");
+    setActiveView('teams');
   }
 
   return (
@@ -94,7 +94,11 @@ export default function TournamentApp() {
           <h1>Lagoppsett og kampplan</h1>
           <p class="tournament-lead">
             Last opp en CSV med fornavn og alder, velg turneringstype, og skriv
-            ut lag, heats og finaler. Alt skjer lokalt i nettleseren.
+            ut lag, heats og finaler. Alt skjer lokalt i nettleseren og ingen
+            ting lagres.{' '}
+            <em className="block">
+              NB: Laster du inn siden på nytt forsvinner alt.
+            </em>
           </p>
         </div>
         <div class="tournament-header-actions print-hidden">
@@ -158,6 +162,6 @@ function normalizePeople(parsedPeople, adultAge) {
   return parsedPeople.map((person, index) => ({
     ...person,
     id: `${person.name}-${person.age}-${index}`,
-    type: person.age >= adultAge ? "adult" : "child",
+    type: person.age >= adultAge ? 'adult' : 'child',
   }));
 }
