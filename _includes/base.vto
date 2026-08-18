@@ -11,6 +11,14 @@ language: nb-NO
     <title>{{ title }}</title>
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="stylesheet" href="/assets/styles.css" />
+    <script>
+      window.feriekolonienSeason = Object.freeze({
+        year: {{ season.year }},
+        registrationOpensAt: "{{ season.registrationOpensAt }}",
+        registrationDeadlineAt: "{{ season.registrationDeadlineAt }}",
+        endsAt: "{{ season.endsAt }}"
+      });
+    </script>
   </head>
 
   <body>
