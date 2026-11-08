@@ -4,6 +4,14 @@ async function fetchAlbums() {
     {
       title,
       coverImage {asset -> {...}},
+      groups[] {
+        _key,
+        title,
+        images[] {
+          asset -> {...},
+          alt
+        }
+      },
       images[] {
         asset -> {...},
         alt,
