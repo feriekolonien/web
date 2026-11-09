@@ -19,10 +19,10 @@ layout: base.vto
     </div>
 
     {{ if sections.length > 1 }}
-    <nav aria-label="Grupper i albumet" class="mb-8 flex flex-wrap justify-center gap-2 sm:mb-12">
+    <nav aria-label="Grupper i albumet" class="sticky top-0 z-10 -mx-4 mb-8 flex flex-wrap justify-center gap-2 bg-white/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:mb-12 sm:px-6 md:-mx-8 md:px-8">
         {{ for section of sections }}
         {{ if section.title }}
-        <a href="#{{ section.id }}" class="rounded-full border border-slate-300 px-4 py-1.5 font-semibold hover:bg-slate-100 transition-colors">
+        <a href="#{{ section.id }}" class="rounded-full border border-slate-300 bg-white px-4 py-1.5 font-semibold hover:bg-slate-100 transition-colors">
             {{ section.title }}
         </a>
         {{ /if }}
