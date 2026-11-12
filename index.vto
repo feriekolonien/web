@@ -1,15 +1,5 @@
 ---
 layout: base.vto
-dates:
-    - title: 1. parti
-      icon: 🦀
-      date: 23. juni - 3. juli
-    - title: 2. parti
-      icon: ☀️
-      date: 10. juli - 20. juli
-    - title: 3. parti
-      icon: 🐚
-      date: 27. juli - 6. august
 ---
 
 <div class="mx-auto mb-14 grid max-w-6xl grid-cols-1 gap-4 pt-8 md:grid-cols-2">
@@ -52,7 +42,7 @@ dates:
         <div class="group relative mb-11 max-w-sm text-white">
             <div class="rounded-xl bg-gradient-to-tr from-[#2C72AC] to-[#46B3D9] py-7 px-6 absolute inset-0 mx-auto rotate-[-8deg] opacity-70 transition-all duration-300 ease-in-out group-hover:-rotate-3 md:ml-0"></div>
             <div class="rounded-xl bg-gradient-to-tr from-[#2C72AC] to-[#46B3D9] py-7 px-6 relative mx-auto shadow-xl md:ml-0 text-center">
-                <h2 class="mb-4 text-3xl font-bold">Datoer for 2026</h2>
+                <h2 id="season-card-title" class="mb-4 text-3xl font-bold">Datoer for {{ season.year }}</h2>
 
                 <!-- Countdown Timer Container -->
                 <div id="countdown-container" class="mb-4">
@@ -84,10 +74,10 @@ dates:
                 <!-- Dates Container (hidden initially) -->
                 <div id="dates-container" class="hidden">
                     <div id="registration-deadline-note" class="mb-5 hidden rounded-lg bg-[#FDE68A] p-3 text-sm text-[#0E2E58]">
-                        <p>Fristen for sommeren 2026 er passert. Søknader vurderes ved ledige plasser.</p>
+                        <p>Fristen for sommeren {{ season.year }} er passert. Søknader vurderes ved ledige plasser.</p>
                     </div>
                     <ul class="text-base md:text-lg space-y-3 text-left">
-                        {{ for date of dates }}
+                        {{ for date of season.parties }}
                             <li>
                                 <div class="bg-white/20 rounded-lg p-3 flex items-center">
                                     <span class="mr-4 text-3xl">{{date.icon}}</span>
@@ -108,37 +98,99 @@ dates:
                     </div>
                 </div>
 
-                <script>
+                <div id="season-ended-container" class="hidden">
+                    <p class="mb-5 text-lg">
+                        Alle årets partier er avsluttet. Takk for latteren, de nye vennskapene og alle de fine sommerminnene!
+                    </p>
+                    <div class="rounded-lg bg-white/20 p-4">
+                        <p id="summer-photos-copy" class="font-bold">Bilder fra sommerens partier vil bli publisert snart.</p>
+                        <p id="summer-photos-detail" class="mt-2 text-sm opacity-90">I mellomtiden kan du se bilder fra tidligere år.</p>
+                    </div>
+                    <a id="summer-photos-link" href="/bilder/" class="mt-6 inline-flex items-center gap-2 rounded-lg bg-white/30 py-3 px-6 font-bold text-white transition-colors duration-200 hover:bg-white/40">
+                        <span id="summer-photos-link-label">Se bilder fra tidligere år</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                            <path fill-rule="evenodd" d="M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+
+                <script type="module">
+                    import { getSeasonPhase, SEASON_PHASE } from "/assets/season.js";
+
                     (function() {
-                        // Target date from global configuration
-                        const targetDate = new Date('{{ openForRegistrationAt }}');
-                        const deadlineDate = new Date('{{ registrationDeadlineAt }}');
+                        const season = window.feriekolonienSeason;
+                        const targetDate = new Date(season.registrationOpensAt);
+                        let photoStatusChecked = false;
                         let lastSeconds = -1;
+
+                        function checkForCurrentSeasonPhotos() {
+                            if (photoStatusChecked) {
+                                return;
+                            }
+                            photoStatusChecked = true;
+
+                            fetch(`/bilder/${season.year}/`, { method: 'HEAD' })
+                                .then((response) => {
+                                    if (!response.ok) {
+                                        return;
+                                    }
+
+                                    const copy = document.getElementById('summer-photos-copy');
+                                    const detail = document.getElementById('summer-photos-detail');
+                                    const link = document.getElementById('summer-photos-link');
+                                    const linkLabel = document.getElementById('summer-photos-link-label');
+
+                                    if (copy) {
+                                        copy.textContent = `Bilder fra sommeren ${season.year} er publisert!`;
+                                    }
+                                    if (detail) {
+                                        detail.textContent = 'Gjenopplev årets fine øyeblikk i bildegalleriet.';
+                                    }
+                                    if (link) {
+                                        link.href = `/bilder/${season.year}/`;
+                                    }
+                                    if (linkLabel) {
+                                        linkLabel.textContent = `Se bildene fra ${season.year}`;
+                                    }
+                                })
+                                .catch(() => {
+                                    // Keep the "published soon" message when the album is unavailable.
+                                });
+                        }
 
                         function updateCountdown() {
                             const now = new Date();
                             const timeDifference = targetDate - now;
-                            const deadlineHasPassed = now > deadlineDate;
+                            const phase = getSeasonPhase(season, now);
+                            const countdownContainer = document.getElementById('countdown-container');
+                            const datesContainer = document.getElementById('dates-container');
+                            const seasonEndedContainer = document.getElementById('season-ended-container');
+                            const seasonCardTitle = document.getElementById('season-card-title');
+
+                            if (phase === SEASON_PHASE.ENDED) {
+                                countdownContainer.style.display = 'none';
+                                datesContainer.classList.add('hidden');
+                                seasonEndedContainer.classList.remove('hidden');
+                                seasonCardTitle.textContent = 'Takk for i år!';
+                                checkForCurrentSeasonPhotos();
+                                return;
+                            }
 
                             // If the target time has passed, show the dates and reveal navbar link
                             if (timeDifference <= 0) {
-                                document.getElementById('countdown-container').style.display = 'none';
-                                const datesContainer = document.getElementById('dates-container');
+                                countdownContainer.style.display = 'none';
                                 datesContainer.classList.remove('hidden');
+                                seasonEndedContainer.classList.add('hidden');
 
                                 const deadlineNote = document.getElementById('registration-deadline-note');
                                 const openCtaLabel = document.getElementById('registration-open-cta-label');
                                 if (deadlineNote) {
-                                    deadlineNote.classList.toggle('hidden', !deadlineHasPassed);
+                                    deadlineNote.classList.toggle('hidden', phase !== SEASON_PHASE.WAITLIST);
                                 }
                                 if (openCtaLabel) {
-                                    openCtaLabel.textContent = deadlineHasPassed ? 'Sett deg på venteliste' : 'Påmelding er åpen!';
-                                }
-
-                                // Show registration link in navbar
-                                const registrationLink = document.getElementById('registration-nav-link');
-                                if (registrationLink) {
-                                    registrationLink.classList.remove('hidden');
+                                    openCtaLabel.textContent = phase === SEASON_PHASE.WAITLIST
+                                        ? 'Sett deg på venteliste'
+                                        : 'Påmelding er åpen!';
                                 }
 
                                 // Add some confetti effect by temporarily adding classes
@@ -183,9 +235,6 @@ dates:
                 </script>
             </div>
         </div>
-        <!--<div class="max-w-sm text-center md:text-right">
-            <span class="block text-sm mt-5">Feriekolonien er over for i år! Takk for all latter og nye minner. Ny påmelding vil bli tilgjengeliggjort til jul!</span>
-        </div>-->
     </div>
 </div>
 <div
@@ -195,8 +244,8 @@ dates:
 >
     <div class="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <p id="registration-sticky-kicker" class="text-sm font-semibold uppercase tracking-wide text-[#46B3D9]">Påmelding 2026</p>
-            <p id="registration-sticky-copy" class="text-base font-bold md:text-lg">Påmeldingen er åpen for sommeren 2026.</p>
+            <p id="registration-sticky-kicker" class="text-sm font-semibold uppercase tracking-wide text-[#46B3D9]">Påmelding {{ season.year }}</p>
+            <p id="registration-sticky-copy" class="text-base font-bold md:text-lg">Påmeldingen er åpen for sommeren {{ season.year }}.</p>
         </div>
         <a href="/register/" class="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 font-bold text-[#0E2E58] transition-colors duration-200 hover:bg-slate-100">
             <span id="registration-sticky-cta-label">Meld på nå</span>
@@ -206,10 +255,11 @@ dates:
         </a>
     </div>
 </div>
-<script>
+<script type="module">
+    import { getSeasonPhase, SEASON_PHASE } from "/assets/season.js";
+
     (function() {
-        const targetDate = new Date('{{ openForRegistrationAt }}');
-        const deadlineDate = new Date('{{ registrationDeadlineAt }}');
+        const season = window.feriekolonienSeason;
         const sourceCta = document.getElementById('registration-open-cta');
         const stickyBanner = document.getElementById('registration-sticky-banner');
         const stickyKicker = document.getElementById('registration-sticky-kicker');
@@ -220,27 +270,31 @@ dates:
             return;
         }
 
-        function updateStickyBannerCopy() {
-            const deadlineHasPassed = new Date() > deadlineDate;
+        function updateStickyBannerCopy(phase) {
+            const waitlistIsOpen = phase === SEASON_PHASE.WAITLIST;
             if (stickyKicker) {
-                stickyKicker.textContent = deadlineHasPassed ? 'Venteliste 2026' : 'Påmelding 2026';
+                stickyKicker.textContent = waitlistIsOpen
+                    ? `Venteliste ${season.year}`
+                    : `Påmelding ${season.year}`;
             }
             if (stickyCopy) {
-                stickyCopy.textContent = deadlineHasPassed
+                stickyCopy.textContent = waitlistIsOpen
                     ? 'Fristen er passert. Søknader vurderes ved ledige plasser.'
-                    : 'Påmeldingen er åpen for sommeren 2026.';
+                    : `Påmeldingen er åpen for sommeren ${season.year}.`;
             }
             if (stickyCtaLabel) {
-                stickyCtaLabel.textContent = deadlineHasPassed ? 'Sett deg på venteliste' : 'Meld på nå';
+                stickyCtaLabel.textContent = waitlistIsOpen ? 'Sett deg på venteliste' : 'Meld på nå';
             }
         }
 
         function setStickyBannerVisibility() {
-            const registrationIsOpen = new Date() >= targetDate;
+            const phase = getSeasonPhase(season);
+            const registrationIsAvailable = phase === SEASON_PHASE.REGISTRATION_OPEN ||
+                phase === SEASON_PHASE.WAITLIST;
             const sourceCtaHasPassed = sourceCta.getBoundingClientRect().bottom < 0;
-            const shouldShow = registrationIsOpen && sourceCtaHasPassed;
+            const shouldShow = registrationIsAvailable && sourceCtaHasPassed;
 
-            updateStickyBannerCopy();
+            updateStickyBannerCopy(phase);
             stickyBanner.classList.toggle('translate-y-full', !shouldShow);
             stickyBanner.classList.toggle('translate-y-0', shouldShow);
             stickyBanner.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');

@@ -6,14 +6,13 @@ import tailwindcss from "lume/plugins/tailwindcss.ts";
 import sitemap from "lume/plugins/sitemap.ts";
 import gzip from "lume/plugins/gzip.ts";
 import esbuild from "lume/plugins/esbuild.ts";
+import { season } from "./season.ts";
 
 const site = lume({
   location: new URL("https://github.com/feriekolonien/web"),
 });
 
-// Global variable for registration opening time
-site.data("openForRegistrationAt", "2025-12-24T12:00:00+01:00");
-site.data("registrationDeadlineAt", "2026-06-01T23:59:59+02:00");
+site.data("season", season);
 
 site.add("/assets");
 site.add("./favicon.ico");

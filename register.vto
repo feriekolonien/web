@@ -8,10 +8,14 @@ title: Påmelding - Trefoldighet Feriekoloni
         <div class="mb-8 text-center">
             <h1 id="registration-page-title" class="text-4xl font-bold text-slate-900 mb-4">Påmelding til Feriekolonien</h1>
             <p id="registration-page-lead" class="text-lg text-slate-700 max-w-2xl mx-auto mb-4">
-                Velkommen til påmelding for sommeren 2026! Fyll ut skjemaet nedenfor for å melde deg på en av våre fantastiske ferieperioder.
+                Velkommen til påmelding for sommeren {{ season.year }}! Fyll ut skjemaet nedenfor for å melde deg på en av våre fantastiske ferieperioder.
             </p>
             <div id="registration-page-deadline-note" class="mx-auto mb-4 hidden max-w-2xl rounded-lg bg-[#FDE68A] p-4 text-sm text-[#0E2E58]">
                 <p>Vi tar kontakt hvis det blir ledig plass.</p>
+            </div>
+            <div id="registration-page-ended-note" class="mx-auto mb-4 hidden max-w-2xl rounded-lg bg-white/70 p-5 text-[#0E2E58] shadow-sm">
+                <p id="registration-photos-copy" class="font-bold">Bilder fra sommerens partier vil bli publisert snart.</p>
+                <a id="registration-photos-link" href="/bilder/" class="mt-3 inline-flex items-center font-semibold text-blue-900 underline">Se bilder fra tidligere år</a>
             </div>
             <p class="text-sm text-slate-600">
                 Har du spørsmål? <a href="/kontakt" class="text-blue-600 hover:text-blue-800 font-medium">Kontakt oss gjerne!</a>
@@ -19,35 +23,84 @@ title: Påmelding - Trefoldighet Feriekoloni
         </div>
     </div>
 
-    <iframe
-        src="https://docs.google.com/forms/d/e/1FAIpQLSefOFcQEJlKf7KF9ZY-6_ys6HB9OB8eDDOv6R65EjOCtZy5Rw/viewform?embedded=true"
-        width="100%"
-        frameborder="0"
-        marginheight="0"
-        marginwidth="0"
-        scrolling="no"
-        class="w-full h-[5200px] sm:h-[4400px]"
-    >
-        Laster inn…
-    </iframe>
+    <div id="registration-form-container" class="hidden">
+        <iframe
+            id="registration-form"
+            data-src="https://docs.google.com/forms/d/e/1FAIpQLSefOFcQEJlKf7KF9ZY-6_ys6HB9OB8eDDOv6R65EjOCtZy5Rw/viewform?embedded=true"
+            title="Påmeldingsskjema for Feriekolonien"
+            width="100%"
+            frameborder="0"
+            marginheight="0"
+            marginwidth="0"
+            scrolling="no"
+            class="w-full h-[5200px] sm:h-[4400px]"
+        >
+            Laster inn…
+        </iframe>
+    </div>
 </div>
 
-<script>
-    (function() {
-        const deadlineDate = new Date('{{ registrationDeadlineAt }}');
-        if (new Date() <= deadlineDate) {
-            return;
-        }
+<script type="module">
+    import { getSeasonPhase, SEASON_PHASE } from "/assets/season.js";
 
+    (function() {
+        const season = window.feriekolonienSeason;
+        const phase = getSeasonPhase(season);
         const title = document.getElementById('registration-page-title');
         const lead = document.getElementById('registration-page-lead');
         const deadlineNote = document.getElementById('registration-page-deadline-note');
+        const endedNote = document.getElementById('registration-page-ended-note');
+        const formContainer = document.getElementById('registration-form-container');
+        const form = document.getElementById('registration-form');
+
+        if (phase === SEASON_PHASE.ENDED) {
+            document.title = 'Takk for i år - Trefoldighet Feriekoloni';
+            if (title) {
+                title.textContent = 'Takk for i år!';
+            }
+            if (lead) {
+                lead.textContent = `Alle partiene er avsluttet, og påmeldingen og ventelisten for sommeren ${season.year} er nå stengt.`;
+            }
+            if (endedNote) {
+                endedNote.classList.remove('hidden');
+            }
+
+            fetch(`/bilder/${season.year}/`, { method: 'HEAD' })
+                .then((response) => {
+                    if (!response.ok) {
+                        return;
+                    }
+
+                    const photosCopy = document.getElementById('registration-photos-copy');
+                    const photosLink = document.getElementById('registration-photos-link');
+                    if (photosCopy) {
+                        photosCopy.textContent = `Bilder fra sommeren ${season.year} er publisert!`;
+                    }
+                    if (photosLink) {
+                        photosLink.href = `/bilder/${season.year}/`;
+                        photosLink.textContent = `Se bildene fra ${season.year}`;
+                    }
+                })
+                .catch(() => {
+                    // Keep the "published soon" message when the album is unavailable.
+                });
+            return;
+        }
+
+        if (formContainer && form) {
+            form.src = form.dataset.src;
+            formContainer.classList.remove('hidden');
+        }
+
+        if (phase !== SEASON_PHASE.WAITLIST) {
+            return;
+        }
 
         if (title) {
             title.textContent = 'Venteliste til Feriekolonien';
         }
         if (lead) {
-            lead.textContent = 'Fristen for sommeren 2026 er passert, men du kan fortsatt fylle ut skjemaet for venteliste.';
+            lead.textContent = `Fristen for sommeren ${season.year} er passert, men du kan fortsatt fylle ut skjemaet for venteliste.`;
         }
         if (deadlineNote) {
             deadlineNote.classList.remove('hidden');

@@ -24,6 +24,10 @@ title: Bilder
         </a>
         .
     </p>
+    <div id="current-season-photo-note" class="mb-8 hidden rounded-xl bg-[#DCEFF7] p-5 text-[#0E2E58]">
+        <p class="text-lg font-bold">Bilder fra sommerens partier vil bli publisert snart.</p>
+        <p class="mt-2">Mens du venter, kan du gjerne bla i sommerminnene fra tidligere år.</p>
+    </div>
     <ul
         role="list"
         class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-2 xl:gap-x-8"
@@ -54,3 +58,14 @@ title: Bilder
         {{ /for }}
     </ul>
 </section>
+
+<script type="module">
+    import { getSeasonPhase, SEASON_PHASE } from "/assets/season.js";
+
+    const season = window.feriekolonienSeason;
+    const currentAlbumLink = document.querySelector(`a[href="/bilder/${season.year}/"]`);
+
+    if (getSeasonPhase(season) === SEASON_PHASE.ENDED && !currentAlbumLink) {
+        document.getElementById('current-season-photo-note')?.classList.remove('hidden');
+    }
+</script>

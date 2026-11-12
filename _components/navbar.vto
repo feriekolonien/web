@@ -84,22 +84,28 @@ links:
     </ul>
 </nav>
 
-<script>
+<script type="module">
+import { getSeasonPhase, SEASON_PHASE } from "/assets/season.js";
+
 (function() {
-    const targetDate = new Date('{{ openForRegistrationAt }}');
-    const deadlineDate = new Date('{{ registrationDeadlineAt }}');
+    const season = window.feriekolonienSeason;
     const registrationLink = document.getElementById('registration-nav-link');
     const registrationLabel = document.getElementById('registration-nav-label');
 
     function checkRegistrationStatus() {
-        const now = new Date();
-        if (now >= targetDate && registrationLink) {
-            registrationLink.classList.remove('hidden');
-            registrationLink.classList.add('flex');
+        const phase = getSeasonPhase(season);
+        const registrationIsAvailable = phase === SEASON_PHASE.REGISTRATION_OPEN ||
+            phase === SEASON_PHASE.WAITLIST;
+
+        if (registrationLink) {
+            registrationLink.classList.toggle('hidden', !registrationIsAvailable);
+            registrationLink.classList.toggle('flex', registrationIsAvailable);
         }
 
-        if (now > deadlineDate && registrationLabel) {
-            registrationLabel.textContent = 'Venteliste';
+        if (registrationLabel) {
+            registrationLabel.textContent = phase === SEASON_PHASE.WAITLIST
+                ? 'Venteliste'
+                : 'Påmelding';
         }
     }
 

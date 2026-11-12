@@ -121,6 +121,30 @@ Content is managed through Sanity CMS. The site fetches:
 3. **Pages** - Static content pages
 4. **Site settings** - Global configuration
 
+### Annual season update
+
+The active season is configured in `season.ts`. Update the year, registration
+dates, final party date, and party labels there before opening registration for
+a new summer.
+
+The public site changes automatically between these states in the visitor's
+browser, without requiring a deployment at the date boundary:
+
+1. Countdown before registration opens
+2. Open registration
+3. Waitlist after the registration deadline
+4. "Takk for i år" after the final party ends
+
+In the final state, registration and waitlist links disappear and the embedded
+Google Form is no longer loaded. The landing and gallery pages say that the
+current summer's photos are coming soon. When an album whose title is the season
+year (for example `2026`) is available in the built site, the landing-page copy
+automatically links to that album instead.
+
+Albums are fetched from Sanity when the site builds. After publishing a new
+album in Sanity, run the GitHub Actions workflow **Deploy Lume site to GitHub
+Pages** (or push a code change) to rebuild and publish it.
+
 ## 🔍 SEO & Performance
 
 - **Server-side rendering** - All content pre-rendered
